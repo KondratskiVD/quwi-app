@@ -1,0 +1,7 @@
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+.app-layout #content {
+  padding-top: 46px;
+}
