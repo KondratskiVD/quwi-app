@@ -48,25 +48,23 @@
 
 <script>
 export default {
-  name: "home",
+  middleware: 'auth',
   data () {
     return {
       projects: []
     }
-  },
-  computed: {
-
   },
   mounted() {
     this.fetchData()
   },
   methods: {
     async fetchData() {
-      const response = await this.$axios.get('/projects-manage/index');
+      const endpoint = '/projects-manage/index'
+      const response = await this.$axios.get(endpoint);
       this.projects = [...response.data.projects]
     },
     editProject(id) {
-      this.$router.push({ path: `/home/${id}`, params: id })
+      this.$router.push({ path: `/projects/${id}`, params: id })
     }
   }
 }

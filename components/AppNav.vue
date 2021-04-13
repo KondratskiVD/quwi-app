@@ -1,11 +1,11 @@
 <template>
   <nav class="app-navbar m-guest">
-    <a href="/home" class="app-quwi">
+    <a href="/" class="app-quwi">
       <img src="~assets/images/quwi-logo.png" width="25px" height="25px">
     </a>
     <div class="b-menu">
       <div data-uid="174" class="c-language-selector b-context-menu direction-right direction-bottom">
-        <a @click="userSignOut" class="">Signup</a>
+        <a @click="logout" class="">Signup</a>
       </div>
     </div>
   </nav>
@@ -15,11 +15,12 @@
 export default {
   name: "AppNav",
   methods: {
-    async userSignOut() {
+    async logout() {
       try {
         await this.$auth.logout()
         .then(() => {
-          this.$router.push({ path: '/login' })
+          this.$store.dispatch('user/LOG_OUT')
+          window.location.reload()
         });
       } catch (err) {
         console.log(err)

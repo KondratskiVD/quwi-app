@@ -34,7 +34,8 @@
 import Loader from '../../components/Loader.vue'
 
 export default {
-  name: "editor",
+  middleware: 'auth',
+  name: "project",
   components: {
     Loader
   },

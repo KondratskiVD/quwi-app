@@ -40,7 +40,7 @@
 <script>
 
 export default {
-  layout: 'clearLayout',
+  layout: 'auth',
   auth: false,
   data() {
     return {
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     async userLogin() {
-      await this.$store.dispatch('user/USER_SIGN_IN', this.login)
+      await this.$store.dispatch('user/LOG_IN', this.login)
     },
   }
 }

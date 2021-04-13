@@ -43,32 +43,34 @@ export default {
     baseURL: 'https://api.quwi.com/v2'
   },
   auth: {
+    rewriteRedirects: false,
+    redirect: {
+      login: '/auth/login',
+      logout: '/',
+      callback: '/login',
+      home: '/'
+    },
     strategies: {
       local: {
-        // token: {
-        //   property: 'token',
-          // required: false,
-          // type: false
-        // },
-        // user: {
-        //   property: 'user',
-        //   autoFetch: false
-        // },
+        _scheme: '~/modules/auth/schemes/fixedLocal.js',
         endpoints: {
-          login: { url: '/auth/login', method: 'post' },
-          logout: { url: '/auth/logout', method: 'post' },
-          user: { url: '/users/profile', method: 'get' },
-        }
+          login: {
+            url: '/auth/login',
+            method: 'post'
+          },
+          logout: {
+            url: '/auth/logout',
+            method: 'post'
+          },
+          user: {
+            url: '/users/profile',
+            method: 'get'
+          },
+        },
+        tokenRequired: true,
+        globalToken: true
       }
-    },
-    redirect: {
-      login: '/login',
-      logout: '/',
-      home: '/home',
-      callback: '/'
-    },
-    watchLoggedIn: true,
-    rewriteRedirects: true
+    }
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

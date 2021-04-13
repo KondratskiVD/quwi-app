@@ -1,17 +1,28 @@
-const state = () => ({});
+
+
+export const state = () => ({
+  auth: {
+    loggedIn: false,
+  }
+})
 const mutations = {};
+
 const getters = {};
 
 const actions = {
-  async USER_SIGN_IN({ dispatch }, data) {
+  async LOG_IN({ dispatch }, data) {
     try {
       await this.$auth.loginWith('local', { data })
         .then(() => {
-          this.$router.push({ path: '/home' })
+          state.loggedIn = true
+          this.$router.push({ path: '/' })
         })
     } catch (error) {
       console.warn(error)
     }
+  },
+  LOG_OUT({ dispatch }) {
+    state.loggedIn = false
   }
 };
 
