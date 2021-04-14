@@ -23,6 +23,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~plugins/filters.js',
+    '~plugins/axios.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -35,7 +37,8 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    '@nuxtjs/toast',
   ],
   router: {
   },
@@ -71,6 +74,19 @@ export default {
         globalToken: true
       }
     }
+  },
+  toast: {
+    position: 'top-right',
+    duration: 3000,
+    register: [
+      {
+        name: 'my-error',
+        message: 'Oops...Something went wrong',
+        options: {
+          type: 'error'
+        }
+      }
+    ]
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

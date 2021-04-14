@@ -35,4 +35,11 @@ html {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
 }
+#content {
+  background: #F4F4F4;
+  min-height: 100%;
+}
+.app-layout {
+  height: 100%;
+}
 </style>

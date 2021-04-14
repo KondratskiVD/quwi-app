@@ -27,10 +27,13 @@
             </div>
           </div>
           <div class="b-button">
-            <div class="btn" style="width: 358px;" @click="userLogin"> <span class="e-text">Login</span>
+            <div class="btn" style="width: 358px;" @click="userLogin">
+              <span v-if="!spinnerOn" class="e-text">Login</span>
+              <Spinner v-else/>
               <button type="button" style="display: none;"></button>
             </div>
-            <a href="/forgot" class="">Forgot password?</a></div>
+            <a href="#" class="">Forgot password?</a>
+          </div>
         </form>
       </div>
     </section>
@@ -38,16 +41,22 @@
 </template>
 
 <script>
+import Spinner from "../../components/Spinner";
+import Loader from "../../components/Loader";
 
 export default {
   layout: 'auth',
   auth: false,
+  components: {
+    Spinner
+  },
   data() {
     return {
       login: {
-        email: 'kondratskivd@gmail.com',
-        password: '1633937v'
-      }
+        email: '',
+        password: ''
+      },
+      spinnerOn: false
     }
   },
   computed: {
@@ -60,8 +69,15 @@ export default {
     }
   },
   methods: {
-    async userLogin() {
-      await this.$store.dispatch('user/LOG_IN', this.login)
+    userLogin() {
+        this.spinnerOn = true
+        this.$store.dispatch('user/LOG_IN', this.login)
+        .then(() => {
+          this.spinnerOn = false
+        })
+        .catch((e) => {
+          this.$toast.error(e)
+        })
     },
   }
 }
@@ -75,7 +91,7 @@ export default {
 }
 
 .container {
-  min-height: calc(100vh - 46px);
+  min-height: 100vh;
   display: flex;
   align-items: center;
 }
@@ -145,7 +161,7 @@ a.c-quwi-logo>.e-logo-text {
   border: 1px solid #4b84da;
   border-radius: 5px;
   padding: 15px;
-  width: 100%;
+  width: calc(100% - 35px);
   outline: none;
 }
 .user-login .b-button .btn {
@@ -161,17 +177,6 @@ a.c-quwi-logo>.e-logo-text {
   border-radius: 9px;
   font-weight: 400;
   margin-top: 17px;
-}
-.btn {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  cursor: pointer;
-}
-.btn:hover {
-  opacity: .7;
-  text-decoration: none;
 }
 .user-login .b-box a:not(.c-quwi-logo) {
   color: #2975dc!important;

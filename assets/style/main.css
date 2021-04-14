@@ -3,5 +3,23 @@ a {
   cursor: pointer;
 }
 .app-layout #content {
-  padding-top: 46px;
+  padding: 46px 0;
+}
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  cursor: pointer;
+}
+.btn:hover {
+  opacity: .7;
+  text-decoration: none;
+}
+body {
+  height: 100vh;
+  min-height: 100%;
+}
+#__nuxt, #__layout {
+  height: 100%;
 }

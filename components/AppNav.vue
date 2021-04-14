@@ -15,16 +15,8 @@
 export default {
   name: "AppNav",
   methods: {
-    async logout() {
-      try {
-        await this.$auth.logout()
-        .then(() => {
-          this.$store.dispatch('user/LOG_OUT')
-          window.location.reload()
-        });
-      } catch (err) {
-        console.log(err)
-      }
+    logout() {
+      this.$store.dispatch('user/LOG_OUT')
     }
   }
 }

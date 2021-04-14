@@ -1,57 +1,48 @@
 <template>
-  <div class="app-todo-list">
-    <div
-      v-for="project in projects"
-      :key="project.id"
-      @click="editProject(project.id)"
-      class="c-todo-list-item js-center-col">
-      <div class="b-todos-content">
-        <div class="b-logo" style="background-color: rgb(61, 127, 248);">
-          <img  width="42px" height="42px" :src="project.logo_url" :alt="project.name">
-        </div>
-        <div class="b-name">
-          <div class="e-name">{{ project.name }}</div>
-        </div>
-        <div
-          v-if="project.is_active"
-          class="b-name">
-          <div class="e-name active-project">Active</div>
-        </div>
-        <div
-          v-else
-          class="b-name">
-          <div class="e-name">Passive</div>
-        </div>
-        <div
-          class="t-name">
-          <div class="e-name">
-            <table>
-              <tr>
-                <td>time this week</td>
-                <td>00:00:00</td>
-              </tr>
-              <tr>
-                <td>this month</td>
-                <td>00:00:00</td>
-              </tr>
-              <tr>
-                <td>total</td>
-                <td>00:00:00</td>
-              </tr>
-            </table>
+  <div class="app-projects-index">
+    <div v-if="isLoadedData" class="b-projects">
+      <div
+        v-for="project in projects"
+        :key="project.id"
+        :class="{ inactive: !project.is_active }"
+        @click="editProject(project.id)"
+        class="b-project-box js-center-col">
+        <div class="b-mover"><i class="bu-th-list"></i></div>
+        <div class="b-project-content">
+          <div class="b-logo">
+            <div class="b-avatar">
+              <img v-if="project.logo_url" width="51" height="51" :src="project.logo_url">
+              <div v-else class="e-empty-avatar" style="height: 51px; width: 51px; font-size: 21px; background-color: rgb(178, 34, 34);">
+                {{ project.name | capitalize }}
+              </div>
+            </div>
+          </div>
+          <div class="b-name">
+            <div class="e-name">{{ project.name }}</div>
+          </div>
+          <div class="b-worker">
+            <div v-if="project.is_active" class="b-status m-active">Active</div>
+            <div v-else class="b-status">Inactive</div>
           </div>
         </div>
       </div>
     </div>
+    <Loader v-else/>
   </div>
 </template>
 
 <script>
+import Loader from "../components/Loader";
+
 export default {
   middleware: 'auth',
+  components: {
+    Loader
+  },
   data () {
     return {
-      projects: []
+      projects: [],
+      isLoadedData: false,
     }
   },
   mounted() {
@@ -59,9 +50,14 @@ export default {
   },
   methods: {
     async fetchData() {
-      const endpoint = '/projects-manage/index'
-      const response = await this.$axios.get(endpoint);
-      this.projects = [...response.data.projects]
+      try {
+        const endpoint = '/projects-manage/index'
+        const response = await this.$axios.get(endpoint)
+        this.projects = [...response.data.projects]
+        this.isLoadedData = true
+      } catch (e) {
+        this.$toast.error(e)
+      }
     },
     editProject(id) {
       this.$router.push({ path: `/projects/${id}`, params: id })
@@ -71,35 +67,21 @@ export default {
 </script>
 
 <style scoped>
-.app-todo-list {
+.b-projects {
+  margin: 15px auto 50px;
   width: 600px;
-  margin: 0 auto;
+  position: relative;
 }
-.c-todo-list-item {
+.b-project-box {
+  margin-bottom: 6px;
   width: 100%;
   align-items: center;
   position: relative;
-  margin: 50px auto 25px;
 }
-.c-todo-list-item .b-todos-content {
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-  border-radius: 8px;
-  border: 1px solid #dedede;
-  padding: 25px;
+.b-project-box .b-project-content:hover {
+  background: #ececec;
   cursor: pointer;
-  font-size: .9em;
-  height: 90px;
-}
-.c-todo-list-item .b-todos-content .b-logo {
-  border: none;
-  width: 42px;
-  height: 42px;
-  color: #fff;
-  border-radius: 50%;
-  font-size: 20px;
-  margin-right: 25px;
+  text-decoration: none;
 }
 .b-logo {
   width: 100%;
@@ -109,27 +91,60 @@ export default {
   justify-content: center;
   position: relative;
 }
-.c-todo-list-item .b-todos-content .b-name {
+table > tr > td {
+  padding-right: 20px;
+}
+.b-avatar .e-empty-avatar {
+  overflow: hidden;
+  white-space: nowrap;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #6495ed;
+  text-transform: uppercase;
+}
+.b-avatar .e-empty-avatar, .b-avatar img {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border-radius: 50%;
+}
+.b-project-box .b-project-content {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #dedede;
+  padding: 25px;
+  cursor: pointer;
+  font-size: .9em;
+}
+.b-project-box .b-project-content .b-logo {
+  border: none;
+  padding: 0;
+  flex: 1;
+  margin-right: 25px;
+  max-width: 65px;
+}
+.b-project-box .b-project-content .b-name {
   flex: 2;
   font-weight: 700;
   overflow: hidden;
 }
-.c-todo-list-item .b-todos-content .t-name {
-  font-weight: 700;
-  overflow: hidden;
-  line-height: 1.5;
+.b-project-box .b-project-content .b-status {
+  flex: 0 0 45px;
+  display: flex;
+  flex-direction: column;
+  color: #777;
+  text-transform: capitalize;
+  margin-bottom: 5px;
 }
-.c-todo-list-item .b-todos-content .b-name .e-name {
-  display: block;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  max-width: 100%;
+.b-project-box .b-project-content .b-status.m-active {
+  color: green;
 }
-.active-project {
-  color: #368916;
-}
-table > tr > td {
-  padding-right: 20px;
+.b-project-box.inactive {
+ opacity: .5;
 }
 </style>

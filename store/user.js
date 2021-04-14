@@ -21,8 +21,14 @@ const actions = {
       console.warn(error)
     }
   },
-  LOG_OUT({ dispatch }) {
-    state.loggedIn = false
+  async LOG_OUT({ dispatch }) {
+    try {
+      await this.$auth.logout()
+        state.loggedIn = false
+        window.location.reload()
+    } catch (error) {
+      console.warn(error)
+    }
   }
 };
 
