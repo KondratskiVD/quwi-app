@@ -42,6 +42,7 @@
 
 <script>
 import Spinner from "../../components/Spinner";
+import Loader from "../../components/Loader";
 
 export default {
   layout: 'auth',
@@ -52,8 +53,8 @@ export default {
   data() {
     return {
       login: {
-        email: 'vitaliibondtest@gmail.com',
-        password: 'vitaliibondtest'
+        email: '',
+        password: ''
       },
       spinnerOn: false
     }
