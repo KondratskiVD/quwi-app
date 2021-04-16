@@ -42,7 +42,6 @@
 
 <script>
 import Spinner from "../../components/Spinner";
-import Loader from "../../components/Loader";
 
 export default {
   layout: 'auth',
