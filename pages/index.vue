@@ -1,8 +1,8 @@
 <template>
   <div class="app-projects-index">
-    <div v-if="isLoadedData" class="b-projects">
-      <div
-        v-for="project in projects"
+    <div class="b-projects">
+
+      <div v-for="project in projects"
         :key="project.id"
         :class="{ inactive: !project.is_active }"
         @click="editProject(project.id)"
@@ -26,39 +26,26 @@
           </div>
         </div>
       </div>
+
     </div>
-    <Loader v-else/>
   </div>
 </template>
 
 <script>
-import Loader from "../components/Loader";
 
 export default {
   middleware: 'auth',
-  components: {
-    Loader
-  },
-  data () {
-    return {
-      projects: [],
-      isLoadedData: false,
+  async fetch({store}) {
+    if (store.getters['projects/projects'].length === 0) {
+      await store.dispatch('projects/fetch')
     }
   },
-  mounted() {
-    this.fetchData()
+  computed: {
+    projects() {
+      return this.$store.getters['projects/projects']
+    }
   },
   methods: {
-    async fetchData() {
-      try {
-        const endpoint = '/projects-manage/index'
-        const response = await this.$axios.get(endpoint)
-        this.projects = [...response.data.projects]
-        this.isLoadedData = true
-      } catch (e) {
-        this.$toast.error(e)
-      }
-    },
     editProject(id) {
       this.$router.push({ path: `/projects/${id}`, params: id })
     }

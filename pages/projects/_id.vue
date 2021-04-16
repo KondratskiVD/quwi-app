@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="app-projects-edit">
-      <div v-if="isLoadedData" class="b-page-content">
+      <div class="b-page-content">
         <div @click="goBack" class="b-back">
           <span class="e-arrow">&lt;</span>
           <span class="e-name">Back</span>
@@ -52,42 +52,30 @@
           </form>
         </div>
       </div>
-      <Loader v-else/>
     </div>
   </div>
 </template>
 
 <script>
-import Loader from '../../components/Loader.vue'
 
 export default {
   middleware: 'auth',
-  name: "project",
-  components: {
-    Loader
+  async asyncData({$axios, params}) {
+    const currentProject = params.id
+    const response = await $axios.get(`/projects-manage/${currentProject}`)
+    const project = response.data.project
+    return { project }
   },
-    data() {
+  data() {
     return {
-      isLoadedData: false,
       project: null,
       showEditName: false
     }
   },
   mounted() {
-    this.fetchData()
+    this.project = this.transformProject(this.project)
   },
   methods: {
-    async fetchData() {
-      try {
-        const currentProject = this.$route.params.id
-        const response = await this.$axios.get(`/projects-manage/${currentProject}`)
-        this.project = this.transformProject(response.data.project)
-        this.isLoadedData = true
-      } catch (e) {
-        this.$toast.error(e)
-        this.isLoadedData = true
-      }
-    },
     saveName() {
       const currentProject = this.$route.params.id
       const data = {name: this.project.name }

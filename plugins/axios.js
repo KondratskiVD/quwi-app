@@ -12,7 +12,8 @@ export default function ({ $axios, app }) {
 
       case 404:
         app.$toast.error('This page not found.')
-
+        break
+      
       case 417:
         app.$toast.error(error.response.data.first_errors.email)
         break
