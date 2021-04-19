@@ -88,7 +88,6 @@ export default {
   height: auto;
   background: url(assets/images/gray_blur.png);
 }
-
 .container {
   min-height: 100vh;
   display: flex;
@@ -180,7 +179,6 @@ a.c-quwi-logo>.e-logo-text {
 .user-login .b-box a:not(.c-quwi-logo) {
   color: #2975dc!important;
 }
-
 input:valid {
   background-color: rgb(232, 240, 254) !important;
 }

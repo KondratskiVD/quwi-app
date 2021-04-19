@@ -35,9 +35,13 @@
 
 export default {
   middleware: 'auth',
-  async fetch({store}) {
+  async fetch({store, app}) {
     if (store.getters['projects/projects'].length === 0) {
-      await store.dispatch('projects/fetch')
+      try {
+        await store.dispatch('projects/fetch')
+      } catch (e) {
+        console.log( 'Server error')
+      }
     }
   },
   computed: {
